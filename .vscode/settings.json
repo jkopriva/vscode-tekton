@@ -1,7 +1,8 @@
 // Place your settings in this file to overwrite default and user settings.
 {
     "files.exclude": {
-        "out": false // set this to true to hide the "out" folder with the compiled JS files
+        "out": false, // set this to true to hide the "out" folder with the compiled JS files
+        "test-resources": false
     },
     "search.exclude": {
         "out": true // set this to false to include "out" folder in search results
@@ -9,4 +10,13 @@
     // Turn off tsc task auto detection since we have the necessary tasks as npm scripts
     "typescript.tsc.autoDetect": "off",
     "debug.node.autoAttach": "off",
+<<<<<<< HEAD
+=======
+    "svg.preview.background": "white",
+    // Run ESlint after every save action
+    "editor.codeActionsOnSave": {
+        "source.fixAll.eslint": true
+      },
+      "eslint.validate": ["typescript"]
+>>>>>>> d9f26b9 (Updates)
 }

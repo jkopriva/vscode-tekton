@@ -18,7 +18,6 @@ module.exports = {
     ],
     rules: {
         'header/header': [2, './header.js'],
-        "@typescript-eslint/no-namespace": "off",
         '@typescript-eslint/no-use-before-define': ['error', { 'functions': false, 'classes': false }],
         '@typescript-eslint/no-unused-vars': [1],
         '@typescript-eslint/explicit-function-return-type': [1, { 'allowExpressions': true }],
@@ -28,6 +27,7 @@ module.exports = {
         'space-infix-ops': ['error', { 'int32Hint': false }],
         'no-multi-spaces': ['error', { "ignoreEOLComments": true }],
         'keyword-spacing': ['error'],
+        "@typescript-eslint/no-namespace": "off"
     },
 
 };

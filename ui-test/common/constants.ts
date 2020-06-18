@@ -18,3 +18,46 @@ export declare namespace commands {
 export declare namespace views {
 	export const TEKTON_TITLE = 'Tekton';
 }
+
+export enum ItemType {
+    application = 'Application',
+    cluster = 'Cluster',
+    component = 'Component',
+    project = 'Project',
+    service = 'Service',
+    storage = 'Storage',
+    url = 'URL'
+}
+
+export namespace notifications {
+    export const ODO_NOT_FOUND = 'Cannot find OpenShift Do';
+    export const OKD_NOT_FOUND = 'Cannot find OKD';
+    export const SAVE_LOGIN = 'Do you want to save username and password?';
+    export const LOGGED_IN = 'You are already logged in';
+    export const CLONE_REPO = 'Do you want to clone git repository for created Component?';
+    export const DOWNLOAD = 'Download and install';
+}
+
+export function itemCreated(type: ItemType, name: string) {
+  return `${type} '${name}' successfully created`;
+}
+
+export function itemDeleted(type: ItemType, name: string) {
+  return `${type} '${name}' successfully deleted`;
+}
+
+export function deleteItem(type: ItemType, name: string) {
+  return `Do you want to delete ${type} '${name}'?`;
+}
+export function itemsLinked(fromItem: string, fromType: ItemType, toItem: string) {
+  return `${fromType} '${fromItem}' successfully linked with ${ItemType.component} '${toItem}'`;
+}
+export function storageCreated(name: string, componentName: string) {
+  return `${itemCreated(ItemType.storage, name)} for ${ItemType.component} '${componentName}'`;
+}
+export function itemFromComponentDeleted(name: string, type: ItemType, componentName: string) {
+  return `${type} '${name}' from ${ItemType.component} '${componentName}' successfully deleted`;
+}
+export function urlCreated(name: string, component: string) {
+  return `${ItemType.url} '${name}' for ${ItemType.component} '${component}' successfully created`;
+}

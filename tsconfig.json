@@ -22,11 +22,8 @@
     "exclude": [
         "node_modules",
         ".vscode-test",
-<<<<<<< HEAD
-        "src/webview"
-=======
+        "src/webview",
         "test-resources"
->>>>>>> First UI tests
     ],
     "include": [
         "src",

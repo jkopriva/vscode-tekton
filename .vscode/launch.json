@@ -5,7 +5,6 @@
 {
 	"version": "0.2.0",
 	"configurations": [
-		
 		{
 			"name": "Extension",
 			"type": "extensionHost",
@@ -71,6 +70,18 @@
 				"VST_DISABLE_COVERAGE": "true",
 				"VSCODE_SINGLE_TEST": "${relativeFile}"
 			}
+		},
+		{
+			"name": "Run/Debug UI Tests",
+			"type": "node",
+			"request": "launch",
+			"program": "${workspaceFolder}/node_modules/.bin/extest",
+			"args": [
+				"setup-and-run",
+				"${workspaceFolder}/out/ui-test/all.js"
+			],
+			"console": "integratedTerminal",
+			"internalConsoleOptions": "neverOpen",
 		}
 	]
 }

@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 # Tekton Pipelines Extension  <img src="https://raw.githubusercontent.com/redhat-developer/vscode-tekton/master/images/tekton.png" alt="tekton" width="50"/>
 
 | System | Status |
@@ -180,3 +181,5 @@ If you discover an issue please file a bug and we will fix it as soon as possibl
 License
 =======
 MIT, See [LICENSE](LICENSE) for more information.
+=======
+>>>>>>> changes
