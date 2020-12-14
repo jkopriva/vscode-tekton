@@ -82,6 +82,18 @@
 			],
 			"console": "integratedTerminal",
 			"internalConsoleOptions": "neverOpen",
-		}
+		},
+		{
+            "name": "Extension integration Tests Debug",
+            "type": "extensionHost",
+            "request": "launch",
+            "runtimeExecutable": "${execPath}",
+            "args": [
+                "${workspaceFolder}/test/fixtures/components/components.code-workspace",
+                "--extensionDevelopmentPath=${workspaceFolder}",
+                "--extensionTestsPath=${workspaceFolder}/out/ui-test/all.js"
+            ],
+            "preLaunchTask": "npm: watch"
+        }
 	]
 }

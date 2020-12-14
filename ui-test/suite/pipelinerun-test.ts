@@ -2,12 +2,11 @@
  *  Copyright (c) Red Hat, Inc. All rights reserved.
  *  Licensed under the MIT License. See LICENSE file in the project root for license information.
  *-----------------------------------------------------------------------------------------------*/
-import { SideBarView, ActivityBar, WebDriver, VSBrowser, InputBox, until, By, ViewSection, Workbench, ViewItem, TreeItem, CustomTreeSection, CustomTreeItem } from 'vscode-extension-tester';
-import { assert, expect } from 'chai';
-import * as path from 'path';
-import { viewHasNoProgress, notificationExists, viewHasItems, inputHasNewMessage, nodeHasNewChildren } from '../common/conditions';
-import { setInputTextAndConfirm, quickPick, findNotification } from '../common/utils';
-import { notifications, ItemType, itemCreated, itemDeleted, deleteItem } from '../common/constants';
+import { SideBarView, ActivityBar, WebDriver, VSBrowser, InputBox, Workbench, ViewItem, CustomTreeSection, CustomTreeItem, BottomBarPanel } from 'vscode-extension-tester';
+import { expect } from 'chai';
+import { notificationExists, viewHasItems, inputHasNewMessage } from '../common/conditions';
+import { setInputTextAndConfirm, quickPick } from '../common/utils';
+import { notifications} from '../common/constants';
 
 export function pipelineRunTest(clusterUrl: string): void {
   const username = process.env.OPENSHIFT_USERNAME ? process.env.OPENSHIFT_USERNAME : 'developer';
@@ -37,24 +36,34 @@ export function pipelineRunTest(clusterUrl: string): void {
       const view = await new ActivityBar().getViewControl('Tekton Pipelines').openView();
     });
 
-    it('Login to OpenShift', async function () {
+    // it('Login to OpenShift', async function () {
+    //   this.timeout(150000);
+    //   const control = new ActivityBar().getViewControl('OpenShift');
+    //   await control.openView();
+    //   await credentialsLogin(clusterUrl, driver, username, password);
+    //   try {
+    //     const saveNotification = await driver.wait(() => { return notificationExists('Do you want to save username and password?'); }, 20000);
+    //     await saveNotification.takeAction('No');
+    //   } catch (err) {
+    //     console.log('Credentials already saved');
+    //   }
+
+
+    //   await driver.wait(() => { return notificationExists('Successfully logged in to'); }, 10000);
+    //   // Check that the cluster node is present in the tree view
+    //   await driver.wait(() => { return viewHasItems(); }, 5000);
+    //   const item = await explorer.findItem(clusterUrl);
+    //   expect(item).not.undefined;
+    // });
+
+    it('Login to OpenShift with terminal', async function () {
       this.timeout(150000);
-      const control = await new ActivityBar().getViewControl('OpenShift');
-      await control.openView();
-      await credentialsLogin(clusterUrl, driver, username, password);
-      try {
-        const saveNotification = await driver.wait(() => { return notificationExists('Do you want to save username and password?'); }, 20000);
-        await saveNotification.takeAction('No');
-      } catch (err) {
-        console.log('Credentials already saved');
-      }
-
-
-      await driver.wait(() => { return notificationExists('Successfully logged in to'); }, 10000);
-      // Check that the cluster node is present in the tree view
-      await driver.wait(() => { return viewHasItems(); }, 5000);
-      const item = await explorer.findItem(clusterUrl);
-      expect(item).not.undefined;
+      const terminalView = await new BottomBarPanel().openTerminalView();
+      await terminalView.executeCommand('rm .kube/config');
+      await terminalView.executeCommand('oc login --token=sha256~zQwgvhST0zUMpN9Xvi5HAP4c6ZPdXvuiT62RLwOF7fY --server=https://api.openshift4.cluster.adapters-crs-qe.com:6443 --insecure-skip-tls-verify');
+      const text = await terminalView.getText();
+      expect(text).has.string('Logged into');
+      //await terminalView.clear();
     });
     
     it('Check Tekton View', async function() {
@@ -64,21 +73,27 @@ export function pipelineRunTest(clusterUrl: string): void {
       const view = await new ActivityBar().getViewControl('Tekton Pipelines').openView();
       await driver.wait(() => { return viewHasItems(); }, 200000);
       explorer = await new SideBarView().getContent().getSection('Tekton Pipelines') as CustomTreeSection;
-      const nodes = await explorer.getVisibleItems();
+      //const nodes = await explorer.getVisibleItems();
       const tektonSection = await new SideBarView().getContent().getSection('Tekton Pipelines') as CustomTreeSection;
       const items = await tektonSection.getVisibleItems();
       expect(items.length).equals(11);
     });
 
-   
     it('Logout', async function() {
-      this.timeout(20000);
-      await new Workbench().executeCommand('OpenShift: Log out');
-      const loginNotification = await driver.wait(() => { return notificationExists('Do you want to logout of cluster?'); }, 20000);
-      await loginNotification.takeAction('Logout');
-      const logoutNotification = await driver.wait(() => { return notificationExists('Successfully logged out. Do you want to login to a new cluster'); }, 20000);
-      await logoutNotification.takeAction('No');
+      this.timeout(150000);
+      const terminalView = await new BottomBarPanel().openTerminalView();
+      await terminalView.executeCommand('oc logout');
+      const text = await terminalView.getText();
+      expect(text).has.string('out on');
     });
+    // it('Logout', async function() {
+    //   this.timeout(20000);
+    //   await new Workbench().executeCommand('OpenShift: Log out');
+    //   const loginNotification = await driver.wait(() => { return notificationExists('Do you want to logout of cluster?'); }, 20000);
+    //   await loginNotification.takeAction('Logout');
+    //   const logoutNotification = await driver.wait(() => { return notificationExists('Successfully logged out. Do you want to login to a new cluster'); }, 20000);
+    //   await logoutNotification.takeAction('No');
+    // });
 
   });
 }
